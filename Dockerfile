@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8000
+    PORT=8080
 
 WORKDIR /app
 
@@ -25,7 +25,7 @@ COPY . .
 # Create all required workspace directories
 RUN mkdir -p uploads/original uploads/pages outputs/json outputs/excel outputs/sql outputs/ocr temp
 
-EXPOSE 8000
+EXPOSE 8080
 
 # Start FastAPI server binding to Railway dynamic $PORT
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8080}"]
