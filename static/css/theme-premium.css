@@ -1222,8 +1222,15 @@ body {
 }
 
 /* Table render styling */
+.table-render-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .rendered-table {
     width: 100%;
+    min-width: 500px;
     border-collapse: collapse;
     margin-top: 12px;
     font-size: 13.5px;
@@ -1246,21 +1253,356 @@ body {
     color: #ffffff;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-    .top-navbar, .workspace-hero, .card-header-bar, .app-footer {
-        padding-left: 20px;
-        padding-right: 20px;
+/* =========================================================
+   MOBILE & TABLET RESPONSIVE SYSTEM
+   ========================================================= */
+
+/* Tablets & Smaller Laptops (<= 992px) */
+@media (max-width: 992px) {
+    .top-navbar {
+        padding: 14px 24px;
+    }
+    .workspace-main {
+        padding: 24px 20px 48px;
+        gap: 24px;
+    }
+    .workspace-hero {
+        padding: 28px 24px;
     }
     .hero-content-box {
         flex-direction: column;
         align-items: flex-start;
+        gap: 24px;
+    }
+    .hero-metrics-strip {
+        width: 100%;
+        justify-content: space-around;
+        padding: 16px 20px;
+    }
+    .card-header-bar {
+        padding: 18px 24px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+    .card-body-content {
+        padding: 24px;
+    }
+    .kpi-header-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablets & Large Mobile (<= 768px) */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        overflow-x: hidden;
+    }
+    .app-wrapper {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    .top-navbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .brand-name {
+        font-size: 18px;
+    }
+    .brand-sub {
+        display: none;
+    }
+    .nav-center {
+        order: 3;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 4px;
+    }
+    .model-pill {
+        font-size: 11.5px;
+        padding: 4px 12px;
+        width: 100%;
+        justify-content: center;
+    }
+    .system-status-chip {
+        padding: 4px 10px;
+        font-size: 11.5px;
+    }
+    .workspace-main {
+        padding: 16px 12px 40px;
+        gap: 18px;
+    }
+    .workspace-hero {
+        padding: 22px 16px;
+        border-radius: var(--radius-md);
+    }
+    .hero-heading {
+        font-size: 24px;
+        line-height: 1.25;
+    }
+    .hero-subtext {
+        font-size: 13.5px;
+    }
+    .hero-metrics-strip {
+        padding: 12px 14px;
+        gap: 12px;
+    }
+    .metric-value {
+        font-size: 18px;
+    }
+    .metric-label {
+        font-size: 11px;
+    }
+    .metric-divider {
+        height: 28px;
+    }
+    
+    /* Upload Card */
+    .upload-workstation-card {
+        border-radius: var(--radius-md);
+    }
+    .card-header-bar {
+        padding: 14px 16px;
+    }
+    .card-header-title h2 {
+        font-size: 16px;
+    }
+    .card-header-title p {
+        font-size: 12px;
+    }
+    .supported-formats-pills {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .format-tag {
+        font-size: 10.5px;
+        padding: 3px 8px;
+    }
+    .card-body-content {
+        padding: 16px 12px;
+    }
+    .drop-zone-container {
+        padding: 28px 14px;
+        border-radius: var(--radius-md);
+    }
+    .drop-instructions h3 {
+        font-size: 15px;
+    }
+    .drop-instructions p {
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+    .select-file-btn {
+        width: 100%;
+        max-width: 260px;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 14px;
+        min-height: 44px;
+    }
+    .selected-file-card {
+        padding: 12px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .remove-file-btn {
+        align-self: flex-end;
+    }
+    .primary-process-btn {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 15px;
+        min-height: 48px;
+        justify-content: center;
+    }
+
+    /* Pipeline Step Tracker */
+    .pipeline-section-card {
+        padding: 16px 14px;
+        border-radius: var(--radius-md);
+    }
+    .pipeline-title-group h3 {
+        font-size: 15px;
+    }
+    .pipeline-subtitle {
+        font-size: 11.5px;
+    }
+    .pipeline-steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    .step-card {
+        padding: 10px 12px;
+    }
+    .step-details strong {
+        font-size: 12px;
+    }
+    .step-details span {
+        font-size: 10px;
+    }
+
+    /* Results Dashboard & KPI */
+    .kpi-header-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .kpi-card {
+        padding: 12px 14px;
+        gap: 10px;
+        border-radius: var(--radius-sm);
+    }
+    .kpi-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 17px;
+    }
+    .kpi-value {
+        font-size: 15px;
+    }
+    .kpi-label {
+        font-size: 11px;
+    }
+
+    /* Workspace Tabs Bar (Horizontal Swipe) */
+    .workspace-tabs-bar {
+        padding: 4px;
+        border-radius: var(--radius-sm);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .workspace-tabs-bar::-webkit-scrollbar {
+        display: none;
+    }
+    .tabs-nav {
+        gap: 4px;
+        flex-wrap: nowrap;
+    }
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 12.5px;
+        flex-shrink: 0;
+    }
+
+    /* Tab Content Panes */
+    .tab-views-container {
+        padding: 16px 12px;
+        border-radius: var(--radius-md);
     }
     .pane-action-bar {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 12px;
     }
     .search-box-wrapper {
         width: 100%;
+        max-width: 100%;
+    }
+    .pane-meta-tag {
+        font-size: 12px;
+    }
+    .extracted-fields-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .field-card {
+        padding: 12px 14px;
+    }
+    .field-key {
+        font-size: 11px;
+    }
+    .field-val {
+        font-size: 14px;
+    }
+
+    /* Document Preview */
+    .document-preview-stage {
+        padding: 12px;
+        min-height: 260px;
+        max-height: 420px;
+    }
+    .zoom-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    /* Code Previews */
+    .ocr-text-box, .json-code-container {
+        padding: 12px;
+        max-height: 380px;
+    }
+    .ocr-text-box pre, .json-code-container pre {
+        font-size: 11.5px;
+    }
+
+    /* Export Grid */
+    .export-center-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .export-card {
+        padding: 16px 14px;
+    }
+    .export-btn {
+        padding: 12px;
+        font-size: 14px;
+        min-height: 44px;
+    }
+
+    /* Footer */
+    .app-footer {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px 16px;
+        text-align: center;
+    }
+    .footer-left {
+        flex-direction: column;
+        gap: 8px;
     }
 }
+
+/* Small Smart Phones (<= 480px) */
+@media (max-width: 480px) {
+    .brand-name {
+        font-size: 16px;
+    }
+    .logo-icon {
+        width: 34px;
+        height: 34px;
+    }
+    .hero-heading {
+        font-size: 21px;
+    }
+    .hero-metrics-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        text-align: center;
+        padding: 10px 8px;
+    }
+    .metric-divider {
+        display: none;
+    }
+    .metric-value {
+        font-size: 16px;
+    }
+    .metric-label {
+        font-size: 9.5px;
+    }
+    .kpi-header-grid {
+        grid-template-columns: 1fr;
+    }
+    .pipeline-steps-grid {
+        grid-template-columns: 1fr;
+    }
+    .select-file-btn, .primary-process-btn {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
