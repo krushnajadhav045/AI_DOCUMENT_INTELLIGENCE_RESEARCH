@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Environment Secrets & Local DB
+.env
+documents.db
+*.sqlite3
+
+# Uploads & Outputs (Do not push user documents to git)
+uploads/original/*
+!uploads/original/.gitkeep
+uploads/pages/*
+!uploads/pages/.gitkeep
+outputs/json/*
+!outputs/json/.gitkeep
+outputs/excel/*
+!outputs/excel/.gitkeep
+outputs/sql/*
+!outputs/sql/.gitkeep
+outputs/ocr/*
+!outputs/ocr/.gitkeep
+temp/*
+!temp/.gitkeep
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

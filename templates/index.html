@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniParse AI — Enterprise Document Intelligence Workstation</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/theme-premium.css">
+</head>
+<body class="dark-theme">
+
+<div class="app-wrapper">
+
+    <!-- =====================================================
+         TOP NAVIGATION BAR
+    ====================================================== -->
+    <header class="top-navbar">
+        <div class="nav-left">
+            <div class="brand-logo">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="url(#logo_grad)" stroke="#818cf8" stroke-width="1.5"/>
+                        <path d="M14 2V8H20" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 13H16M8 17H13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="17" cy="17" r="2.5" fill="#38bdf8"/>
+                        <defs>
+                            <linearGradient id="logo_grad" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4f46e5"/>
+                                <stop stop-color="#7c3aed" stop-opacity="0.8"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">OmniParse <span class="brand-badge">AI</span></span>
+                    <span class="brand-sub">Document Intelligence Workstation</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-center">
+            <div class="model-pill">
+                <span class="sparkle-icon">✦</span>
+                <span class="model-name">Powered by Gemini AI & Vision OCR</span>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <div class="system-status-chip">
+                <span class="status-dot-pulse"></span>
+                <span>System Operational</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         MAIN WORKSPACE CONTAINER
+    ====================================================== -->
+    <main class="workspace-main">
+
+        <!-- =================================================
+             HERO BANNER & QUICK START
+        ================================================== -->
+        <section class="workspace-hero">
+            <div class="hero-content-box">
+                <div class="hero-text-group">
+                    <span class="hero-pill-tag">✦ Multimodal Document Parsing Engine</span>
+                    <h1 class="hero-heading">
+                        Transform Any Document into <span class="gradient-text">Structured Data</span>
+                    </h1>
+                    <p class="hero-subtext">
+                        Extract key entities, tables, line items, and raw text from PDFs, invoices, receipts, and scans with AI accuracy.
+                    </p>
+                </div>
+
+                <!-- Metrics Overview Strip -->
+                <div class="hero-metrics-strip">
+                    <div class="metric-item">
+                        <span class="metric-value">99.4%</span>
+                        <span class="metric-label">Extraction Accuracy</span>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="metric-item">
+                        <span class="metric-value">&lt; 2s</span>
+                        <span class="metric-label">Avg. Processing</span>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="metric-item">
+                        <span class="metric-value">7+</span>
+                        <span class="metric-label">Output Formats</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================
+             UPLOAD WORKSTATION CARD
+        ================================================== -->
+        <section class="upload-workstation-card" id="uploadCard">
+            <div class="card-header-bar">
+                <div class="card-header-title">
+                    <div class="icon-wrapper">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2>Document Intake & Processing</h2>
+                        <p>Upload your file or drag into the workstation below</p>
+                    </div>
+                </div>
+                <div class="supported-formats-pills">
+                    <span class="format-tag">PDF</span>
+                    <span class="format-tag">PNG</span>
+                    <span class="format-tag">JPG</span>
+                    <span class="format-tag">WEBP</span>
+                    <span class="format-tag">TIFF</span>
+                </div>
+            </div>
+
+            <div class="card-body-content">
+                <!-- DROP ZONE -->
+                <div class="drop-zone-container" id="dropZone">
+                    <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.webp,.bmp,.tiff,.tif" hidden>
+                    
+                    <div class="drop-illustration">
+                        <div class="pulse-ring"></div>
+                        <div class="cloud-upload-icon">
+                            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="url(#upload_icon_grad)" stroke-width="1.8">
+                                <path d="M16 16l-4-4-4 4M12 12v9" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                <defs>
+                                    <linearGradient id="upload_icon_grad" x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#a78bfa"/>
+                                        <stop stop-color="#38bdf8"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="drop-instructions">
+                        <h3>Drag & drop your document file here</h3>
+                        <p>or browse files from your computer</p>
+                        <label for="fileInput" class="select-file-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            <span>Browse File</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SELECTED FILE CARD -->
+                <div class="selected-file-card hidden" id="selectedFile">
+                    <div class="file-card-info">
+                        <div class="file-type-badge" id="fileBadge">PDF</div>
+                        <div class="file-meta">
+                            <span class="file-name-text" id="fileName">invoice_document.pdf</span>
+                            <div class="file-sub-meta">
+                                <span id="fileSize">0 KB</span>
+                                <span class="meta-dot">•</span>
+                                <span id="fileTypeLabel">Document</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="remove-file-btn" id="removeFile" title="Remove file">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- PROCESS BUTTON & CONTROLS -->
+                <div class="action-footer">
+                    <button type="button" class="primary-process-btn" id="uploadBtn" disabled>
+                        <span class="btn-sparkle">✦</span>
+                        <span class="btn-text">Execute AI Analysis Pipeline</span>
+                    </button>
+                </div>
+
+                <!-- UPLOADING / STATUS MESSAGES -->
+                <div class="status-message-banner hidden" id="uploadMessage"></div>
+            </div>
+        </section>
+
+        <!-- =================================================
+             PIPELINE PROGRESS TRACKER
+        ================================================== -->
+        <section class="pipeline-section-card hidden" id="pipelineSection">
+            <div class="pipeline-header">
+                <div class="pipeline-title-group">
+                    <div class="spinner-ring"></div>
+                    <div>
+                        <h3 id="pipelineMessage">Processing Document Pipeline...</h3>
+                        <p class="pipeline-subtitle">Automated Multi-Stage Document Analysis in progress</p>
+                    </div>
+                </div>
+                <div class="progress-percentage-chip" id="processingPercent">0%</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-track">
+                <div class="progress-fill-bar" id="progressFill"></div>
+            </div>
+
+            <!-- 7 Step Pipeline Tracker -->
+            <div class="pipeline-steps-grid">
+                <div class="step-card" id="step1">
+                    <div class="step-badge">1</div>
+                    <div class="step-details">
+                        <strong>Document Intake</strong>
+                        <span>Ingestion & Validation</span>
+                    </div>
+                    <div class="step-icon-status">○</div>
+                </div>
+
+                <div class="step-card" id="step2">
+                    <div class="step-badge">2</div>
+                    <div class="step-details">
+                        <strong>PDF Page Render</strong>
+                        <span>High-res Conversion</span>
+                    </div>
+                    <div class="step-icon-status">○</div>
+                </div>
+
+                <div class="step-card" id="step3">
+                    <div class="step-badge">3</div>
+                    <div class="step-details">
+                        <strong>Pre-processing</strong>
+                        <span>Deskew & Denoise</span>
+                    </div>
+                    <div class="step-icon-status">○</div>
+                </div>
+
+                <div class="step-card" id="step4">
+                    <div class="step-badge">4</div>
+                    <div class="step-details">
+                        <strong>Vision OCR</strong>
+                        <span>Text & Bounding Boxes</span>
+                    </div>
+                    <div class="step-icon-status">○</div>
+                </div>
+
+                <div class="step-card" id="step5">
+                    <div class="step-badge">5</div>
+                    <div class="step-details">
+                        <strong>Layout & Tables</strong>
+                        <span>Structure Detection</span>
+                    </div>
+                    <div class="step-icon-status">○</div>
+                </div>
+
+                <div class="step-card" id="step6">
+                    <div class="step-badge">6</div>
+                    <div class="step-details">
+                        <strong>AI Correction</strong>
+                        <span>Context Alignment</span>
+                    </div>
+                    <div class="step-icon-status">○</div>
+                </div>
+
+                <div class="step-card" id="step7">
+                    <div class="step-badge">7</div>
+                    <div class="step-details">
+                        <strong>Data Export</strong>
+                        <span>JSON / Excel Generation</span>
+                    </div>
+                    <div class="step-icon-status">○</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================
+             ERROR DISPLAY CARD
+        ================================================== -->
+        <section class="error-card-wrapper hidden" id="processingError">
+            <div class="error-banner">
+                <div class="error-icon">⚠️</div>
+                <div class="error-content">
+                    <h3>Document Processing Encountered an Error</h3>
+                    <p id="processingErrorMessage">Failed to analyze the document. Please check the file format and try again.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================
+             RESULTS WORKSPACE DASHBOARD
+        ================================================== -->
+        <section class="results-dashboard-container hidden" id="resultsSection">
+
+            <!-- Summary KPI Header Bar -->
+            <div class="kpi-header-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon icon-purple">📄</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Document Classification</span>
+                        <strong class="kpi-value" id="documentType">-</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon icon-blue">⚡</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Processing Time</span>
+                        <strong class="kpi-value" id="processingTime">-</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon icon-green">🎯</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Pages Count</span>
+                        <strong class="kpi-value" id="pageCount">-</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon icon-amber">📑</div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Filename</span>
+                        <strong class="kpi-value" id="resultFilename">-</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspace Tabs Bar -->
+            <div class="workspace-tabs-bar">
+                <div class="tabs-nav">
+                    <button type="button" class="tab-btn active" data-tab="overviewTab">
+                        <span class="tab-icon">📊</span>
+                        <span>Key Extracted Data</span>
+                        <span class="tab-badge" id="fieldsCountBadge">0</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="previewTab">
+                        <span class="tab-icon">📄</span>
+                        <span>Document Preview</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="tablesTab">
+                        <span class="tab-icon">📋</span>
+                        <span>Detected Tables</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="ocrTab">
+                        <span class="tab-icon">🔍</span>
+                        <span>OCR Raw Text</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="jsonTab">
+                        <span class="tab-icon">{}</span>
+                        <span>Structured JSON</span>
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="exportTab">
+                        <span class="tab-icon">📥</span>
+                        <span>Export Center</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT VIEWS -->
+            <div class="tab-views-container">
+
+                <!-- 1. OVERVIEW / KEY-VALUE FIELDS TAB -->
+                <div class="tab-content-pane active" id="overviewTab">
+                    <div class="pane-action-bar">
+                        <div class="search-box-wrapper">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="fieldSearchInput" placeholder="Filter extracted key-value fields...">
+                        </div>
+                        <div class="pane-meta-tag">
+                            <span class="meta-label">Document ID:</span>
+                            <code id="resultDocumentId">-</code>
+                        </div>
+                    </div>
+
+                    <div class="extracted-fields-grid" id="extractedFields">
+                        <div class="empty-state-placeholder">
+                            <div class="placeholder-icon">⌛</div>
+                            <p>Processing results will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. DOCUMENT PREVIEW TAB -->
+                <div class="tab-content-pane" id="previewTab">
+                    <div class="pane-action-bar">
+                        <h4 class="pane-title">Enhanced Image & Layout Preview</h4>
+                        <div class="zoom-controls">
+                            <button type="button" class="zoom-btn" id="zoomOutBtn" title="Zoom Out">-</button>
+                            <span class="zoom-level" id="zoomLevelText">100%</span>
+                            <button type="button" class="zoom-btn" id="zoomInBtn" title="Zoom In">+</button>
+                            <button type="button" class="zoom-btn" id="zoomResetBtn">Reset</button>
+                        </div>
+                    </div>
+
+                    <div class="document-preview-stage" id="documentPreview">
+                        <div id="previewMessage" class="preview-placeholder">
+                            Processed document image preview will render here.
+                        </div>
+                        <img id="processedImagePreview" src="" alt="Processed Document Preview">
+                    </div>
+                </div>
+
+                <!-- 3. TABLES TAB -->
+                <div class="tab-content-pane" id="tablesTab">
+                    <div class="pane-action-bar">
+                        <h4 class="pane-title">Extracted Tabular Structures</h4>
+                    </div>
+                    <div class="table-render-container" id="tableContainer">
+                        <div class="empty-table-placeholder">No structured tables detected in this document.</div>
+                    </div>
+                </div>
+
+                <!-- 4. OCR TEXT TAB -->
+                <div class="tab-content-pane" id="ocrTab">
+                    <div class="pane-action-bar">
+                        <h4 class="pane-title">Full OCR Extracted Text</h4>
+                        <button type="button" class="action-btn-sm" id="copyOcrBtn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+                            <span>Copy Raw Text</span>
+                        </button>
+                    </div>
+                    <div class="ocr-text-box">
+                        <pre id="ocrText" class="code-font">No OCR text available.</pre>
+                    </div>
+                </div>
+
+                <!-- 5. STRUCTURED JSON TAB -->
+                <div class="tab-content-pane" id="jsonTab">
+                    <div class="pane-action-bar">
+                        <h4 class="pane-title">Structured JSON Response Output</h4>
+                        <button type="button" id="copyJsonBtn" class="action-btn-sm">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path></svg>
+                            <span>Copy Clean JSON</span>
+                        </button>
+                    </div>
+                    <div class="json-code-container">
+                        <pre id="jsonOutput" class="code-font"></pre>
+                    </div>
+                </div>
+
+                <!-- 6. EXPORT CENTER TAB -->
+                <div class="tab-content-pane" id="exportTab">
+                    <div class="export-center-grid">
+                        <div class="export-card">
+                            <div class="export-icon json-color">{}</div>
+                            <div class="export-details">
+                                <h3>Structured JSON Data</h3>
+                                <p>Standard payload containing key-value pairs, entities, and OCR metrics.</p>
+                            </div>
+                            <button type="button" class="export-btn" id="jsonBtn">
+                                <span>Download JSON</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="export-card">
+                            <div class="export-icon excel-color">📊</div>
+                            <div class="export-details">
+                                <h3>Excel Workbook (.xlsx)</h3>
+                                <p>Clean multi-sheet spreadsheet with key values & extracted table rows.</p>
+                            </div>
+                            <button type="button" class="export-btn" id="excelBtn">
+                                <span>Download Excel</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="export-card">
+                            <div class="export-icon image-color">🖼️</div>
+                            <div class="export-details">
+                                <h3>Processed Image (.png)</h3>
+                                <p>Enhanced preprocessed page image generated during vision pipeline.</p>
+                            </div>
+                            <button type="button" class="export-btn" id="imageBtn">
+                                <span>Download PNG</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="export-card">
+                            <div class="export-icon text-color">📝</div>
+                            <div class="export-details">
+                                <h3>OCR Text File (.txt)</h3>
+                                <p>Complete extracted document text formatted in plain text lines.</p>
+                            </div>
+                            <button type="button" class="export-btn" id="textBtn">
+                                <span>Download Text</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="export-card">
+                            <div class="export-icon pdf-color">📥</div>
+                            <div class="export-details">
+                                <h3>Original Document File</h3>
+                                <p>Retrieve the original unmodified input file uploaded to system.</p>
+                            </div>
+                            <button type="button" class="export-btn" id="originalBtn">
+                                <span>Download Original</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+    <footer class="app-footer">
+        <div class="footer-left">
+            <span>OmniParse AI Enterprise v1.0.0</span>
+            <span class="sep">•</span>
+            <span>FastAPI + OpenCV + PyMuPDF + Gemini AI</span>
+        </div>
+        <div class="footer-right">
+            <span class="security-chip">🔒 Encrypted Workplace Intake</span>
+        </div>
+    </footer>
+
+</div>
+
+<!-- Floating Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- JavaScript Logic -->
+<script src="/static/js/app.js"></script>
+</body>
+</html>
