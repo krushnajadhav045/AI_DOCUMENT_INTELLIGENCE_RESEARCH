@@ -1,312 +1,136 @@
+# OmniParse AI — Enterprise Document Intelligence
 
+A FastAPI-based document intelligence application that ingests uploaded documents, runs OCR/vision and AI extraction workflows, stores structured metadata, and exports outputs across multiple formats (`JSON`, `Excel`, `SQL`, and `OCR`).
 
-## Release
-- [2026/07/21] 🤝 Thanks to the [ms-swift community](https://github.com/modelscope/ms-swift) for their support, our model now supports training with [ms-swift](https://github.com/modelscope/ms-swift).
-- [2026/07/03] 🤝 Thanks to the Baidu Cloud team for their support. Our model is now available on [Baidu Cloud](https://cloud.baidu.com/doc/OCR/s/fmr1p39gb).
-- [2026/06/28] 🤝 Thanks to the [vLLM community](https://github.com/vllm-project/vllm) and [Tianyu Guo](https://github.com/gty111) for their support, our model now supports vLLM inference.
-- [2026/06/24] 🤝 Thanks to [AK](https://x.com/_akhaliq) for creating a demo for us. It is now available at [Hugging Face Spaces](https://huggingface.co/spaces/baidu/Unlimited-OCR).
-- [2026/06/23] 📄 Our paper is now available on [arXiv](https://arxiv.org/abs/2606.23050).
-- [2026/06/23] 🤝 Thanks to the [ModelScope community](https://github.com/modelscope) for their support. Our model is now available at [ModelScope](https://modelscope.cn/models/PaddlePaddle/Unlimited-OCR).
-- [2026/06/22] 🚀 We present [Unlimited-OCR](https://github.com/baidu/Unlimited-OCR), aiming to push [Deepseek-OCR](https://github.com/deepseek-ai/DeepSeek-OCR) one step further.
+---
 
-## Inference
+Always learning, building projects, and exploring new technologies in Data Science, Data Analytics, and AI.
 
-### Transformers
-Inference using Huggingface transformers on NVIDIA GPUs. Requirements tested on python 3.12.3 + CUDA12.9：
+---
 
-```
-torch==2.10.0
-torchvision==0.25.0
-transformers==4.57.1
-Pillow==12.1.1
-matplotlib==3.10.8
-einops==0.8.2
-addict==2.4.0
-easydict==1.13
-pymupdf==1.27.2.2
-psutil==7.2.2
-```
+## Overview
 
-```python
-import os
-import torch
-from transformers import AutoModel, AutoTokenizer
+* **Application Entrypoint:** `app_4.py` (`OmniParse AI — Enterprise Document Intelligence`, v1.0.0)
+* **Configuration & Workspace Setup:** `config.py` (Pydantic `Settings` + automatic directory creation)
+* **Dependencies:** `requirements_4.txt` (FastAPI, Uvicorn, OpenCV, PyMuPDF, PaddleOCR, Google GenAI, SQLAlchemy, Pandas, OpenPyXL)
+* **Deployment:** Docker (`Dockerfile` on `python:3.10-slim`) and process configuration (`uvicorn` on `$PORT`)
 
-model_name = 'baidu/Unlimited-OCR'
+## Project Structure
 
-tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-model = AutoModel.from_pretrained(
-    model_name,
-    trust_remote_code=True,
-    use_safetensors=True,
-    torch_dtype=torch.bfloat16,
-)
-model = model.eval().cuda()
-
-# ── Single image supports two configs: gundam or base ──
-# gundam: base_size=1024, image_size=640, crop_mode=True
-# base: base_size=1024, image_size=1024, crop_mode=False
-model.infer(
-    tokenizer,
-    prompt='<image>document parsing.',
-    image_file='your_image.jpg',
-    output_path='your/output/dir',
-    base_size=1024, image_size=640, crop_mode=True,
-    max_length=32768,
-    no_repeat_ngram_size=35, ngram_window=128,
-    save_results=True,
-)
-
-# ── Multi page / PDF only uses base (image_size=1024) ──
-model.infer_multi(
-    tokenizer,
-    prompt='<image>Multi page parsing.',
-    image_files=['page1.png', 'page2.png', 'page3.png'],
-    output_path='your/output/dir',
-    image_size=1024,
-    max_length=32768,
-    no_repeat_ngram_size=35, ngram_window=1024,
-    save_results=True,
-)
-
-# ── PDF (convert pages to images, then multi-page parsing) ──
-import tempfile, fitz  # PyMuPDF
-
-def pdf_to_images(pdf_path, dpi=300):
-    doc = fitz.open(pdf_path)
-    tmp_dir = tempfile.mkdtemp(prefix='pdf_ocr_')
-    mat = fitz.Matrix(dpi / 72, dpi / 72)
-    paths = []
-    for i, page in enumerate(doc):
-        out = os.path.join(tmp_dir, f'page_{i+1:04d}.png')
-        page.get_pixmap(matrix=mat).save(out)
-        paths.append(out)
-    doc.close()
-    return paths
-
-model.infer_multi(
-    tokenizer,
-    prompt='<image>Multi page parsing.',
-    image_files=pdf_to_images('your_doc.pdf', dpi=300),
-    output_path='your/output/dir',
-    image_size=1024,
-    max_length=32768,
-    no_repeat_ngram_size=35, ngram_window=1024,
-    save_results=True,
-)
+```text
+├── app_4.py                 # FastAPI app, routes (/, /health, /favicon.ico), static/template mounting, routers
+├── config.py                # Pydantic Settings and workspace directory initialization
+├── requirements_4.txt       # Python package dependencies
+├── Dockerfile               # Container build and Uvicorn runtime definition
+├── .gitignore               # Ignored build artifacts, virtualenvs, local DB, and temp/output files
+├── routes/
+│   ├── upload.py            # Upload endpoint router
+│   ├── process.py           # Document processing / OCR / extraction router
+│   └── download.py          # Output export / download router
+├── templates/
+│   └── index.html           # Frontend HTML served at /
+├── static/                  # Static assets mounted at /static
+├── uploads/
+│   ├── original/            # Uploaded source files
+│   └── pages/               # Rendered document pages
+├── outputs/
+│   ├── json/                # JSON export artifacts
+│   ├── excel/               # Excel (.xlsx) export artifacts
+│   ├── sql/                 # SQL export artifacts
+│   └── ocr/                 # OCR text/data artifacts
+└── temp/                    # Temporary processing files
 ```
 
-### vLLM
+## Configuration (`config.py`)
 
-Please refer to the official vLLM recipe for deployment details:
+Settings are loaded via `pydantic-settings` (with `.env` support):
 
-**Recipe:** [https://recipes.vllm.ai/baidu/Unlimited-OCR](https://recipes.vllm.ai/baidu/Unlimited-OCR)
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `GEMINI_API_KEY` | `""` | API key for Google GenAI (`google-genai`) integration |
+| `DATABASE_URL` | `"sqlite:///./documents.db"` | Database connection string |
+| `UPLOAD_DIR` | `"uploads"` | Base directory for uploaded files (`original/`, `pages/`) |
+| `OUTPUT_DIR` | `"outputs"` | Base directory for generated exports (`json/`, `excel/`, `sql/`, `ocr/`) |
+| `TEMP_DIR` | `"temp"` | Directory for temporary working files |
+| `MAX_FILE_SIZE_MB` | `25` | Maximum allowed upload file size in megabytes |
 
-##### Docker Images
-Use the following Docker images depending on your GPU platform:
+> **Security Note:** Never commit real API keys or `.env` files with live secrets to version control. Rotate any exposed keys and keep secrets in environment variables or a local `.env` ignored by `.gitignore`.
 
-**Default (CUDA 13.0):**
+## Getting Started (Local Setup)
+
+### 1. Create a Virtual Environment & Install Dependencies
+
 ```bash
-docker pull vllm/vllm-openai:unlimited-ocr
-```
-**For Hopper GPUs (CUDA 12.9)**
-```bash
-docker pull vllm/vllm-openai:unlimited-ocr-cu129
-```
-
-### SGLang
-
-Set up the environment (uv-managed virtualenv). Install the local SGLang wheel first,
-then pin `kernels==0.9.0` and install PyMuPDF for PDF-to-image conversion:
-```shell
-uv venv --python 3.12
+python -m venv .venv
+# On Linux/macOS:
 source .venv/bin/activate
+# On Windows:
+.venv\Scripts\activate
 
-uv pip install wheel/sglang-0.0.0.dev11416+g92e8bb79e-py3-none-any.whl
-uv pip install kernels==0.11.7
-uv pip install pymupdf==1.27.2.2
+pip install --upgrade pip setuptools wheel
+pip install -r requirements_4.txt
 ```
 
-Start the SGLang server:
-```shell
-python -m sglang.launch_server \
-    --model baidu/Unlimited-OCR \
-    --served-model-name Unlimited-OCR \
-    --attention-backend fa3 \
-    --page-size 1 \
-    --mem-fraction-static 0.8 \
-    --context-length 32768 \
-    --enable-custom-logit-processor \
-    --disable-overlap-schedule \
-    --skip-server-warmup \
-    --host 0.0.0.0 \
-    --port 10000
+### 2. Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+DATABASE_URL=sqlite:///./documents.db
+UPLOAD_DIR=uploads
+OUTPUT_DIR=outputs
+TEMP_DIR=temp
+MAX_FILE_SIZE_MB=25
 ```
 
-Send streaming requests to the OpenAI-compatible API:
-```python
-import base64
-import json
-import os
-import tempfile
+### 3. Run the FastAPI Server
 
-import fitz
-import requests
-from sglang.srt.sampling.custom_logit_processor import DeepseekOCRNoRepeatNGramLogitProcessor
+Start Uvicorn for local development:
 
-server_url = "http://127.0.0.1:10000"
-
-session = requests.Session()
-session.trust_env = False
-
-
-def pdf_to_images(pdf_path, dpi=300):
-    doc = fitz.open(pdf_path)
-    tmp_dir = tempfile.mkdtemp(prefix="pdf_ocr_")
-    mat = fitz.Matrix(dpi / 72, dpi / 72)
-    image_paths = []
-    for i, page in enumerate(doc):
-        image_path = os.path.join(tmp_dir, f"page_{i + 1:04d}.png")
-        page.get_pixmap(matrix=mat).save(image_path)
-        image_paths.append(image_path)
-    doc.close()
-    return image_paths
-
-
-def encode_image(image_path):
-    ext = os.path.splitext(image_path)[1].lower()
-    mime = "image/jpeg" if ext in (".jpg", ".jpeg") else f"image/{ext.lstrip('.')}"
-    with open(image_path, "rb") as f:
-        data = base64.b64encode(f.read()).decode("utf-8")
-    return {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{data}"}}
-
-
-def build_content(prompt, image_paths):
-    return [{"type": "text", "text": prompt}] + [encode_image(path) for path in image_paths]
-
-
-def generate(prompt, image_paths, image_mode, ngram_window):
-    payload = {
-        "model": "Unlimited-OCR",
-        "messages": [{"role": "user", "content": build_content(prompt, image_paths)}],
-        "temperature": 0,
-        "skip_special_tokens": False,
-        "images_config": {"image_mode": image_mode},
-        "custom_logit_processor": DeepseekOCRNoRepeatNGramLogitProcessor.to_str(),
-        "custom_params": {
-            "ngram_size": 35,
-            "window_size": ngram_window,
-        },
-        "stream": True,
-    }
-    response = session.post(
-        f"{server_url}/v1/chat/completions",
-        headers={"Content-Type": "application/json"},
-        data=json.dumps(payload),
-        timeout=1200,
-        stream=True,
-    )
-    response.raise_for_status()
-
-    chunks = []
-    for line in response.iter_lines(chunk_size=1, decode_unicode=True):
-        if not line or not line.startswith("data: "):
-            continue
-        data = line[len("data: "):]
-        if data == "[DONE]":
-            break
-        event = json.loads(data)
-        delta = event["choices"][0].get("delta", {}).get("content", "")
-        if delta:
-            print(delta, end="", flush=True)
-            chunks.append(delta)
-    print()
-    return "".join(chunks)
-
-
-# Single image supports two configs: gundam or base. Example below uses gundam.
-generate("document parsing.", ["your_image.jpg"], image_mode="gundam", ngram_window=128)
-
-# Multi image (base only)
-generate("Multi page parsing.", ["page1.png", "page2.png"], image_mode="base", ngram_window=1024)
-
-# PDF (base only)
-generate("Multi page parsing.", pdf_to_images("your_doc.pdf", dpi=300), image_mode="base", ngram_window=1024)
+```bash
+uvicorn app_4:app --reload --host 0.0.0.0 --port 8000
 ```
 
-For batch inference, `infer.py` starts the SGLang server automatically and sends concurrent requests for an image directory or PDF:
-```shell
-# Image directory
-python infer.py \
-    --image_dir ./examples/images \
-    --output_dir ./outputs \
-    --concurrency 8 \
-    --image_mode gundam
+* Web UI: `http://localhost:8000/`
+* Health check: `http://localhost:8000/health`
 
-# PDF pages
-python infer.py \
-    --pdf ./examples/document.pdf \
-    --output_dir ./outputs \
-    --concurrency 8 \
-    --image_mode gundam
+## Running with Docker
+
+Build and run the container using the provided `Dockerfile` setup (note: update the module name in `CMD` to `app_4:app` if your entrypoint file is named `app_4.py`):
+
+```bash
+docker build -t omniparse-ai .
+docker run -d -p 8080:8080 --env-file .env omniparse-ai
 ```
 
-Useful options:
-```shell
---model_dir baidu/Unlimited-OCR   # Local path or Hugging Face model ID
---gpu 0                           # CUDA_VISIBLE_DEVICES value
---server_log ./log/sglang_server.log
-```
+## Notes & Deployment Details
 
-For OmniDocBench evaluation, you need to perform the following post-processing.
-```python
-DET_RE = re.compile(r'<\|det\|>([^<\s]+)(?:\s*\[[^\]]*\])?\s*<\|/det\|>(.*)', re.DOTALL)
+* **Entrypoint Module Name:** `app_4.py` defines the `app` FastAPI instance, while the sample `Dockerfile` and `Procfile` command reference `app:app`. Ensure your start command matches your actual filename (`app_4:app` or `app:app`).
+* **System Libraries for Vision & OCR:** Running OpenCV, PyMuPDF, and PaddleOCR on slim Debian containers requires system libraries such as `build-essential`, `libgl1`, `libglib2.0-0`, `libgomp1`, and `curl`.
 
-def remove_det(raw: str) -> str:
-    """
-    Strip <|det|>type [bbox]<|/det|> markers, group lines belonging to the
-    same block with \\n, and separate different blocks with \\n\\n.
-    """
-    blocks = []
-    cur = None
-    for line in raw.splitlines():
-        line = line.rstrip()
-        if not line:
-            continue
-        m = DET_RE.match(line)
-        if m:
-            category, content = m.group(1).strip(), m.group(2).strip()
-            if category == 'image':
-                continue
-            if cur is not None:
-                blocks.append(cur)
-            cur = [content] if content else []
-            continue
-        if cur is None:
-            cur = []
-        cur.append(line)
-    if cur is not None:
-        blocks.append(cur)
-    text = '\n\n'.join('\n'.join(b) for b in blocks).strip()
-    return text
-```
+---
 
-## Visualization
+## 🌐 Socials:
 
-<img src="assets/long-horizon-ocr.gif" width="100%" alt="Long-horizon OCR demo" />
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your-email@example.com)
 
-## Acknowledgement
+## 💻 Tech Stack:
 
-We would like to thank [Deepseek-OCR](https://github.com/deepseek-ai/DeepSeek-OCR), [Deepseek-OCR-2](https://github.com/deepseek-ai/DeepSeek-OCR-2), [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) for their valuable models and ideas.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
-## Citation
-```bibtex
-@misc{yin2026unlimitedocrworks,
-      title={Unlimited OCR Works}, 
-      author={Youyang Yin and Huanhuan Liu and YY and Qunyi Xie and Chaorun Liu and Shiqi Yang and Shaohua Wang and Zhanlong Liu and Hao Zou and Jinyue Chen and Shu Wei and Jingjing Wu and Mingxin Huang and Zhen Wu and Guibin Wang and Tengyu Du and Lei Jia},
-      year={2026},
-      eprint={2606.23050},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2606.23050}, 
-}
+## 📊 GitHub Stats:
+
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=your-github-username&show_icons=true&theme=default)
+
+## Author
+
+**Rushikesh Machindra Pawar** — MCA Department, Deogiri College, Chhatrapati Sambhajinagar
